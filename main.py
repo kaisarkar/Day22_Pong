@@ -3,6 +3,7 @@ from turtle import Screen, Turtle
 from paddle import Paddle
 from ball import Ball
 import time
+from scoreboard import Scoreboard
 
 screen = Screen()
 screen.setup(width=800, height=600)
@@ -14,6 +15,7 @@ screen.tracer(0)
 left_paddle = Paddle((-390, 0))
 right_paddle = Paddle((380, 0))
 ball = Ball()
+scoreboard = Scoreboard()
 
 
 screen.listen()
@@ -28,7 +30,7 @@ ball_direction = random.choice([ball.move_top_right, ball.move_bottom_left])
 
 while game_is_on:
     screen.update()
-    time.sleep(0.1)
+    time.sleep(ball.move_speed)
     ball_direction()
     # Check for collision with boundary
     if ball.ycor() >= 280 or ball.ycor() <= -280:
@@ -38,8 +40,13 @@ while game_is_on:
     if ball.distance(right_paddle) < 50 and ball.xcor() > 320 or ball.distance(left_paddle) < 50 and ball.xcor() < -320:
         ball.bounce_x()
 
+    if ball.xcor() > 380:
+        ball.reset_position()
+        scoreboard.r_point()
 
-
+    if ball.xcor() < -380:
+        ball.reset_position()
+        scoreboard.l_point()
 
 
 screen.exitonclick()
